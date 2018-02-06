@@ -9,19 +9,19 @@
   <title>Python读写Excel文件 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Microsoft Excel 几乎无处不在，使用 Excel 既可以保存客户、库存和雇员数据，还可以跟踪运营、销售和财务活动。人们在商业活动中使用 Excel 的方式五花八门，难以计数。 与 Python 的 csv 模块不同，Python 中没有处理 Excel 文件（就是带有 .xls 和 .xlsx 扩展名的文件）的标准模块。xlrd 和 xlwt 扩展包使 Python 可以在任何操作系">
+<meta name="keywords" content="Python 笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python读写Excel文件">
 <meta property="og:url" content="http://yoursite.com/2018/02/06/Python读写Excel文件/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Microsoft Excel 几乎无处不在，使用 Excel 既可以保存客户、库存和雇员数据，还可以跟踪运营、销售和财务活动。人们在商业活动中使用 Excel 的方式五花八门，难以计数。 与 Python 的 csv 模块不同，Python 中没有处理 Excel 文件（就是带有 .xls 和 .xlsx 扩展名的文件）的标准模块。xlrd 和 xlwt 扩展包使 Python 可以在任何操作系">
-<meta property="og:image" content="http://yoursite.com/2018/02/06/Python读写Excel文件/media/15172842664662/15172982092563.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/02/06/Python读写Excel文件/media/15172842664662/15173056385699.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/02/06/Python读写Excel文件/media/15172842664662/15173892351887.jpg">
-<meta property="og:updated_time" content="2018-02-06T07:41:24.000Z">
+<meta property="og:updated_time" content="2018-02-06T07:55:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python读写Excel文件">
 <meta name="twitter:description" content="Microsoft Excel 几乎无处不在，使用 Excel 既可以保存客户、库存和雇员数据，还可以跟踪运营、销售和财务活动。人们在商业活动中使用 Excel 的方式五花八门，难以计数。 与 Python 的 csv 模块不同，Python 中没有处理 Excel 文件（就是带有 .xls 和 .xlsx 扩展名的文件）的标准模块。xlrd 和 xlwt 扩展包使 Python 可以在任何操作系">
-<meta name="twitter:image" content="http://yoursite.com/2018/02/06/Python读写Excel文件/media/15172842664662/15172982092563.jpg">
+<meta name="twitter:image" content="http://yoursite.com/2018/02/06/Python读写Excel文件/media/15172842664662/15173056385699.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -189,7 +189,6 @@
 <p>本节中的演示代码只解释新添加的。没有添加的都是在CSV文件读写的里面。</p>
 </blockquote>
 <h5 id="确定工作簿中工作表的数量、名称和每个工作表中行列的数量"><a href="#确定工作簿中工作表的数量、名称和每个工作表中行列的数量" class="headerlink" title="确定工作簿中工作表的数量、名称和每个工作表中行列的数量"></a>确定工作簿中工作表的数量、名称和每个工作表中行列的数量</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> xlrd <span class="keyword">import</span> open_workbook</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">input_file = sys.argv[<span class="number">1</span>]</span><br><span class="line"><span class="comment">#打开输入文件</span></span><br><span class="line">workbook = open_workbook(input_file)</span><br><span class="line"></span><br><span class="line">print(<span class="string">'有%s个表'</span> % workbook.nsheets)</span><br><span class="line"><span class="comment"># 遍历输入文件中的工作表</span></span><br><span class="line"><span class="keyword">for</span> worksheet <span class="keyword">in</span> workbook.sheets():</span><br><span class="line">    print(<span class="string">'表名:'</span>,worksheet.name,</span><br><span class="line">          <span class="string">'\t 行:'</span>,worksheet.nrows,</span><br><span class="line">          <span class="string">'\t 列:'</span>,worksheet.ncols)</span><br></pre></td></tr></table></figure>
-<p><img src="media/15172842664662/15172982092563.jpg" alt="-w324"></p>
 <h3 id="处理单个工作表"><a href="#处理单个工作表" class="headerlink" title="处理单个工作表"></a>处理单个工作表</h3><h4 id="1-读写Excel文件"><a href="#1-读写Excel文件" class="headerlink" title="1. 读写Excel文件"></a>1. 读写Excel文件</h4><ul>
 <li><p>基础Python + xlrd + xlwt</p>
   <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span>  xlrd <span class="keyword">import</span> open_workbook</span><br><span class="line"><span class="keyword">from</span>  xlwt <span class="keyword">import</span> Workbook</span><br><span class="line"></span><br><span class="line">input_file = sys.argv[<span class="number">1</span>]</span><br><span class="line">output_file = sys.argv[<span class="number">2</span>]</span><br><span class="line"><span class="comment">#生产workbook对象，以使我们可以将结果写入用于输出的Excel文件</span></span><br><span class="line">output_workbook =  Workbook()</span><br><span class="line"><span class="comment">#为输出工作簿添加一个工作表</span></span><br><span class="line">output_worksheet = output_workbook.add_sheet(<span class="string">'jan_2013_output'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open_workbook(input_file) <span class="keyword">as</span> workbook:</span><br><span class="line">    <span class="comment">#引用名字是‘january_2013’的工作表</span></span><br><span class="line">    worksheet = workbook.sheet_by_name(<span class="string">'january_2013'</span>)</span><br><span class="line">    <span class="comment">#迭代行、列</span></span><br><span class="line">    <span class="keyword">for</span> row_index <span class="keyword">in</span> range(worksheet.nrows):</span><br><span class="line">        <span class="keyword">for</span> column_index <span class="keyword">in</span>  range(worksheet.ncols):</span><br><span class="line">            <span class="comment">#使用 xlwt 的 write 函数和行与列的索引将每个单元格的值写入输出文件的工作表</span></span><br><span class="line">            output_worksheet.write(row_index,</span><br><span class="line">                                   column_index,</span><br><span class="line">                                   worksheet.cell_value(row_index,column_index))</span><br><span class="line"><span class="comment">#保存关闭</span></span><br><span class="line">output_workbook.save(output_file)</span><br></pre></td></tr></table></figure>
@@ -601,6 +600,17 @@ writer.save()
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Python 笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -791,6 +801,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Python 笔记</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
