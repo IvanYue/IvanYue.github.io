@@ -1,13 +1,170 @@
-<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Python读写Excel文件"><meta name="keywords" content="Python 笔记"><meta name="author" content="John Doe,undefined"><meta name="copyright" content="John Doe"><title>Python读写Excel文件 | boke</title><link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css?version=undefined"><script>var GLOBAL = { 
-  root: '/',
-  algolia: undefined,
-  copy: {
-    success: '复制成功',
-    error: '复制错误',
-    noSupport: '浏览器不支持'
-  },
-  localSearch: undefined
-} </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#内省Excel工作簿"><span class="toc-number">1.</span> <span class="toc-text">内省Excel工作簿</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#处理单个工作表"><span class="toc-number"></span> <span class="toc-text">处理单个工作表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-读写Excel文件"><span class="toc-number"></span> <span class="toc-text">1. 读写Excel文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#转换时间格式"><span class="toc-number">1.</span> <span class="toc-text">转换时间格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-筛选特定行"><span class="toc-number"></span> <span class="toc-text">2. 筛选特定行</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-行中的值满足某个条件"><span class="toc-number">1.</span> <span class="toc-text">1. 行中的值满足某个条件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-行中的值属于某个集合"><span class="toc-number">2.</span> <span class="toc-text">2. 行中的值属于某个集合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-行中的值匹配与特定的正则表达式"><span class="toc-number">3.</span> <span class="toc-text">3. 行中的值匹配与特定的正则表达式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-筛选特定列"><span class="toc-number"></span> <span class="toc-text">3. 筛选特定列</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-使用列索引值"><span class="toc-number">1.</span> <span class="toc-text">1. 使用列索引值</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#销售额阈值"><span class="toc-number"></span> <span class="toc-text">销售额阈值</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#判断是不是第一个工作表"><span class="toc-number"></span> <span class="toc-text">判断是不是第一个工作表</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#处理多个工作簿-多个Excel文件"><span class="toc-number"></span> <span class="toc-text">处理多个工作簿(多个Excel文件)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-工作表计数以及每个工作表中的行列计数"><span class="toc-number">1.</span> <span class="toc-text">1. 工作表计数以及每个工作表中的行列计数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-从多个工作簿中连接数据"><span class="toc-number">2.</span> <span class="toc-text">2. 从多个工作簿中连接数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-为每个工作簿和工作表计算总数和均值"><span class="toc-number">3.</span> <span class="toc-text">3. 为每个工作簿和工作表计算总数和均值</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">John Doe</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">2</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">1</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container" style="background-image: url(true);"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">boke</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus"><a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span></div><div id="post-info"><div id="post-title">Python读写Excel文件</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2018-02-06</time></div></div></div><div class="layout" id="content-inner"><article id="post"><div id="post-content"><p>Microsoft Excel 几乎无处不在，使用 Excel 既可以保存客户、库存和雇员数据，还可以跟踪运营、销售和财务活动。人们在商业活动中使用 Excel 的方式五花八门，难以计数。</p>
+<!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="boke">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://yoursite.com">
+    <!--SEO-->
+
+
+
+
+
+<meta name="robots" content="all" />
+<meta name="google" content="all" />
+<meta name="googlebot" content="all" />
+<meta name="verify" content="all" />
+    <!--Title-->
+
+
+<title>Python读写Excel文件 | boke</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="boke" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css?rev=3.3.4">
+<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+	<div class="hide">
+		<script type="text/javascript">
+			var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan class='cnzz_stat_icon_1263868967 hide' %3E%3Cscript%20src%3D%22https%3A%2F%2Fs95.cnzz.com%2Fz_stat.php%3Fweb_id%3D1272564536%22%3E%3C%2Fscript%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D1263868967%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+	</div>
+
+
+
+
+
+
+    
+</head>
+
+
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header"  style="background-image:url(http://7xpw2b.com1.z0.glb.clouddn.com/hexo-sinppet/img/banner2.jpg)"  >
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title="">
+            <img src="/img/avatar.jpg" alt="logo头像">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
+            
+                 <img src="/img/branding.png" alt="Snippet 博客主题">  
+             
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                    </span>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>首页</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/categories/前端/"><i class="fa fa-fw "></i>前端</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/categories/后端/"><i class="fa fa-fw "></i>后端</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/categories/工具/"><i class="fa fa-fw "></i>工具</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/categories/资源/"><i class="fa fa-fw "></i>资源</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Python读写Excel文件">
+            
+	            Python读写Excel文件
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/ ">
+             
+        </a>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            <a href="/tags/Python 笔记">
+               Python 笔记
+            </a>
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2018/02/06</span>
+    </span>
+</div>
+
+            
+            
+    </div>
+    
+    <div class="post-body post-content">
+        <p>Microsoft Excel 几乎无处不在，使用 Excel 既可以保存客户、库存和雇员数据，还可以跟踪运营、销售和财务活动。人们在商业活动中使用 Excel 的方式五花八门，难以计数。</p>
 <p>与 Python 的 csv 模块不同，Python 中没有处理 Excel 文件（就是带有 .xls 和 .xlsx 扩展名的文件）的标准模块。<code>xlrd</code> 和 <code>xlwt</code> 扩展包使 Python 可以在任何操作系统上处理 Excel 文件，而且对 Excel 日期型数据的支持非常好.</p>
 <h4 id="内省Excel工作簿"><a href="#内省Excel工作簿" class="headerlink" title="内省Excel工作簿"></a>内省Excel工作簿</h4><p>Excel 文件与 CSV 文件至少在两个重要方面有所不同。</p>
 <ol>
@@ -334,4 +491,199 @@ writer.save()
 <li>pandas<br>pandas 可以直接在多个工作簿之间迭代，并可以同时在工作簿级别和工作表级别计算统计量。计算工作簿级别的统计量，将它们转换成一个数据框，然后通过基于工作簿名称的左连接将两个数据框合并在一起，并将结果数据框添加到一个列表中。当所有工作簿级别的数据框都进入列表之后，将这些数据框连接成一个独立数据框，并写入输出文件.</li>
 </ul>
 <pre><code><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> sys,os,glob</span><br><span class="line"></span><br><span class="line">input_path = <span class="string">'/Users/yyf/PycharmProjects/ReadTest/DataSouce/Excel'</span></span><br><span class="line">output_file = <span class="string">'/Users/yyf/PycharmProjects/ReadTest/DataSouce/total_average.xls'</span></span><br><span class="line"></span><br><span class="line">all_workbooks = glob.glob(os.path.join(input_path,<span class="string">'*.xls*'</span>))</span><br><span class="line"></span><br><span class="line">data_frames = []</span><br><span class="line"><span class="keyword">for</span> workbook <span class="keyword">in</span> all_workbooks:</span><br><span class="line">    all_worksheets = pd.read_excel(workbook,sheetname=<span class="keyword">None</span>,index_col=<span class="keyword">None</span>)</span><br><span class="line">    workbook_total_sales = []</span><br><span class="line">    workbook_number_of_sales = []</span><br><span class="line">    worksheet_data_frames = []</span><br><span class="line">    worksheets_data_frame = <span class="keyword">None</span></span><br><span class="line">    workbook_data_frame = <span class="keyword">None</span></span><br><span class="line">    <span class="keyword">for</span> worksheet_name,data <span class="keyword">in</span> all_worksheets.items():</span><br><span class="line">        total_sales= pd.DataFrame([float(str(value).strip(<span class="string">'$'</span>).replace(<span class="string">','</span>,<span class="string">''</span>)) <span class="keyword">for</span> value <span class="keyword">in</span> data.loc[:,<span class="string">'Sale Amount'</span>]]).sum()</span><br><span class="line">        number_of_sales = len(data.loc[:,<span class="string">'Sale Amount'</span>])</span><br><span class="line">        average_sales = pd.DataFrame(total_sales/number_of_sales)</span><br><span class="line">        workbook_total_sales.append(total_sales)</span><br><span class="line">        workbook_number_of_sales.append(number_of_sales)</span><br><span class="line">        data = &#123;<span class="string">'workbook'</span>:os.path.basename(workbook),</span><br><span class="line">                <span class="string">'worksheet'</span>:worksheet_name,</span><br><span class="line">                <span class="string">'worksheet_total'</span>:total_sales,</span><br><span class="line">                <span class="string">'worksheet_average'</span>:average_sales&#125;</span><br><span class="line"></span><br><span class="line">        worksheet_data_frames.append(pd.DataFrame(data,columns=[<span class="string">'workbook'</span>,<span class="string">'worksheet'</span>,<span class="string">'worksheet_total'</span>,<span class="string">'worksheet_average'</span>]))</span><br><span class="line">    worksheets_data_frame = pd.concat(worksheet_data_frames,axis=<span class="number">0</span>,ignore_index=<span class="keyword">True</span>)</span><br><span class="line">    workbook_total = pd.DataFrame(workbook_total_sales).sum()</span><br><span class="line">    workbook_total_number_of_sales = pd.DataFrame(workbook_number_of_sales).sum()</span><br><span class="line">    workbook_average = pd.DataFrame(workbook_total / workbook_total_number_of_sales)</span><br><span class="line">    workbook_stats = &#123;<span class="string">'workbook'</span>: os.path.basename(workbook),</span><br><span class="line">                          <span class="string">'workbook_total'</span>: workbook_total,</span><br><span class="line">                          <span class="string">'workbook_average'</span>: workbook_average&#125;</span><br><span class="line">    workbook_stats = pd.DataFrame(workbook_stats, columns=[<span class="string">'workbook'</span>, <span class="string">'workbook_total'</span>, <span class="string">'workbook_average'</span>])</span><br><span class="line">    workbook_data_frame = pd.merge(worksheets_data_frame, workbook_stats, on=<span class="string">'workbook'</span>, how=<span class="string">'left'</span>)</span><br><span class="line">    data_frames.append(workbook_data_frame)</span><br><span class="line"></span><br><span class="line">all_data_concatenated = pd.concat(data_frames,axis=<span class="number">0</span>,ignore_index=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">writer = pd.ExcelWriter(output_file)</span><br><span class="line">all_data_concatenated.to_excel(writer,sheet_name =<span class="string">'sums_and_averages'</span>,index = <span class="keyword">False</span> )</span><br><span class="line">writer.save()</span><br></pre></td></tr></table></figure>
-</code></pre></div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://yoursite.com/2018/02/06/Python读写Excel文件/">http://yoursite.com/2018/02/06/Python读写Excel文件/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明来自 <a href="http://yoursite.com" target="_blank">boke</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Python-笔记/">Python 笔记</a></div><elif theme.sharejs && theme.sharejs.enable></elif></article><nav id="pagination"><div class="next-post pull-right"><a href="/2018/02/06/hello-world/"><span>Hello World</span><i class="fa fa-chevron-right"></i></a></div></nav><elif theme.laibili && theme.laibili.enable></elif><elif theme.gitment && theme.gitment.enable></elif></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2018 By John Doe</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="/js/third-party/anime.min.js"></script><script src="/js/third-party/jquery.min.js"></script><script src="/js/third-party/jquery.fancybox.min.js"></script><script src="/js/third-party/velocity.min.js"></script><script src="/js/third-party/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.4.2"></script><script src="/js/fancybox.js?version=1.4.2"></script><script src="/js/sidebar.js?version=1.4.2"></script><script src="/js/copy.js?version=1.4.2"></script><script src="/js/fireworks.js?version=1.4.2"></script><script src="/js/transition.js?version=1.4.2"></script><script src="/js/scroll.js?version=1.4.2"></script><script src="/js/head.js?version=1.4.2"></script></body></html>
+</code></pre>
+    </div>
+
+    <div class="post-footer">   
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">Snippet</a>
+            
+        </div>
+        <div>
+            
+        </div>  
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+    
+        <a href="/2018/02/06/hello-world/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
+    
+</div>
+
+
+    <div id="comments">
+        
+	<!--PC和WAP自适应版-->
+<div id="SOHUCS"></div>
+<script type="text/javascript">
+	(function(){var appid='cyt8KmUC1';var conf='prod_855a68d3b3d91855360a6215672a505a';var width=window.innerWidth||document.documentElement.clientWidth;if(width<960){window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id='+appid+'&conf='+conf+'"><\/script>');}else{var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}
+	c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})});}})();
+</script>	
+
+    </div>
+
+
+
+
+
+                </main>
+                
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">    
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢?">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget notification">
+        <h3 class="title">网站公告</h3>
+        <div>
+            <p>主题Snippet v1.2.0版本已经上线！欢迎更新~ <br/>
+主题下载：<a href="https://github.com/shenliyang/hexo-theme-snippet" title="fork me" target="_blank">Snippet主题</a> <br/>
+<hr/>接受贡献，包括不限于提交问题与需求，修复代码。欢迎Pull Request<br/>支持主题：<a href="https://github.com/shenliyang/hexo-theme-snippet/stargazers">Star一下</a>
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/shenliyang" rel="external nofollow" title="Github" target="_blank">
+			    	<i class="git fa fa-git"></i>
+			    </a>
+            
+	            <a href="mailto:snippet@91h5.cc" rel="external nofollow" title="邮箱" target="_blank">
+			    	<i class="envelope-o fa fa-envelope-o"></i>
+			    </a>
+            
+	            <a href="/" rel="external nofollow" title="联系QQ" target="_blank">
+			    	<i class="qq fa fa-qq"></i>
+			    </a>
+            
+	            <a href="/" rel="external nofollow" title="微博" target="_blank">
+			    	<i class="weibo fa fa-weibo"></i>
+			    </a>
+            
+	            <a href="/" rel="external nofollow" title="QQ群" target="_blank">
+			    	<i class="users fa fa-users"></i>
+			    </a>
+            
+	            <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
+			    	<i class="feed fa fa-feed"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+
+        
+        
+    <div class="widget">
+      <h3 class="title">归档</h3>
+        <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/"><i class="fa" aria-hidden="true">February 2018</i></a><span class="archive-list-count">2</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        <a href="/tags/Python-笔记/" style="font-size: 10px;">Python 笔记</a>
+    </div>
+  </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">友链</h3>
+        <div class="content friends-link">
+        
+            <a href="http://www.shenliyang.com" class="fa" target="_blank">个人博客</a>
+        
+        </div>
+    </div>
+
+
+        
+    </aside>
+
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12"> 
+                <span>Copyright &copy; 2017
+                </span> | 
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> | 
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+	<script src="/js/search.js?rev=@@hash"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+
+</body>
+</html>
